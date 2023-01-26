@@ -7,7 +7,6 @@ import com.crud.tasks.trello.config.TrelloConfig;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +23,7 @@ public class TrelloClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrelloClient.class);
 
     private final RestTemplate restTemplate;
+
     private final TrelloConfig trelloConfig;
 
     public CreatedTrelloCard createNewCard(TrelloCardDto trelloCardDto) {
@@ -41,16 +41,16 @@ public class TrelloClient {
         return restTemplate.postForObject(url, null, CreatedTrelloCard.class);
     }
 
-    private URI uri() {
-        return UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/members/" + trelloConfig.getTrelloUsername() + "/boards")
-                .queryParam("key",trelloConfig.getTrelloAppKey())
-                .queryParam("token", trelloConfig.getTrelloToken())
-                .queryParam("fields", "name,id")
-                .queryParam("lists", "all")
-                .build()
-                .encode()
-                .toUri();
-    }
+//    private URI url() {
+//        return UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/members/" + trelloConfig.getTrelloUsername() + "/boards")
+//                .queryParam("key",trelloConfig.getTrelloAppKey())
+//                .queryParam("token", trelloConfig.getTrelloToken())
+//                .queryParam("fields", "name,id")
+//                .queryParam("lists", "all")
+//                .build()
+//                .encode()
+//                .toUri();
+//    }
 
     public List<TrelloBoardDto> getTrelloBoards() {
         URI url = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/members/" + trelloConfig.getTrelloUsername() + "/boards")

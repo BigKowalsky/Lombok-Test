@@ -27,5 +27,10 @@ public class CreatedTrelloCard {
     private Badges badges;
 
     public CreatedTrelloCard(String s, String test_task, String s1) {
+        id = s;
+        name = test_task;
+        shortUrl = s1;
     }
+
+
 }
