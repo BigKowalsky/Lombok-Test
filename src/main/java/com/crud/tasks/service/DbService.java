@@ -30,5 +30,9 @@ public class DbService {
         return null;
     }
 
+    public Task deleteAll() {
+        repository.deleteAll();
+        return null;
+    }
 
 }
