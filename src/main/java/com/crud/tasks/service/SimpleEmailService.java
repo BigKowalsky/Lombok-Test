@@ -36,6 +36,16 @@ public class SimpleEmailService {
         }
     }
 
+    public void sendTasksInfo(final Mail mail) {
+        log.info("Starting email preparation...");
+        try{
+            javaMailSender.send(createTaskMimeMessage(mail));
+            log.info("Email has been sent.");
+        } catch (MailException e) {
+            log.error("Failed to process email sending: " + e.getMessage(), e);
+        }
+    }
+
     private MimeMessagePreparator createMimeMessage(final Mail mail) {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -55,4 +65,25 @@ public class SimpleEmailService {
         }
         return mailMessage;
     }
+
+    private MimeMessagePreparator createTaskMimeMessage(final Mail mail) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setTo(mail.getMailTo());
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(mailCreatorService.buildNumberOfTasksEmail(mail.getMessage()), true);
+        };
+    }
+
+    private SimpleMailMessage createTaskMailMessage(final Mail mail) {
+        SimpleMailMessage mailTaskMessage = new SimpleMailMessage();
+        mailTaskMessage.setTo(mail.getMailTo());
+        mailTaskMessage.setSubject(mail.getSubject());
+        mailTaskMessage.setText(mailCreatorService.buildNumberOfTasksEmail(mail.getMessage()));
+        if (Optional.ofNullable(mail.getMailToCC()).isPresent()) {
+            mailTaskMessage.setCc(mail.getMailToCC());
+        }
+        return mailTaskMessage;
+    }
+
 }
